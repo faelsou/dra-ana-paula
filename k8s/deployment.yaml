@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: estetica-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: estetica-app
+  template:
+    metadata:
+      labels:
+        app: estetica-app
+    spec:
+      containers:
+      - name: estetica-app
+        image: estetica-app:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: VITE_SUPABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: supabase-secrets
+              key: url
+        - name: VITE_SUPABASE_ANON_KEY
+          valueFrom:
+            secretKeyRef:
+              name: supabase-secrets
+              key: anon-key
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.2"
+            memory: "256Mi"
+---
