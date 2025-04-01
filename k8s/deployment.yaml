@@ -13,26 +13,43 @@ spec:
         app: estetica-app
     spec:
       containers:
-      - name: estetica-app
-        image: estetica-app:latest
-        ports:
-        - containerPort: 80
-        env:
-        - name: VITE_SUPABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: supabase-secrets
-              key: url
-        - name: VITE_SUPABASE_ANON_KEY
-          valueFrom:
-            secretKeyRef:
-              name: supabase-secrets
-              key: anon-key
-        resources:
-          limits:
-            cpu: "0.5"
-            memory: "512Mi"
-          requests:
-            cpu: "0.2"
-            memory: "256Mi"
----
+        - name: estetica-app
+          image: faelsouz/dra-ana-paula:v1
+          ports:
+            - containerPort: 80
+          env:
+            - name: VITE_SUPABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: supabase-secrets
+                  key: url
+            - name: VITE_SUPABASE_ANON_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: supabase-secrets
+                  key: anon-key
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "512Mi"
+            requests:
+              cpu: "0.2"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+        - name: nginx-prometheus-exporter
+          image: nginx/nginx-prometheus-exporter:0.10.0
+          args:
+            - "-nginx.scrape-uri=http://localhost:80/nginx_status"
+          ports:
+            - containerPort: 9113
