@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: est-app 
   name: estetica-app
 spec:
   replicas: 3
@@ -30,26 +31,38 @@ spec:
                   key: anon-key
           resources:
             limits:
-              cpu: "0.5"
+              cpu: "1"
               memory: "512Mi"
             requests:
-              cpu: "0.2"
+              cpu: "0.5"
               memory: "256Mi"
           livenessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            initialDelaySeconds: 15 # Aumenta o delay inicial
+            periodSeconds: 20 # Aumenta a periodicidade
+            timeoutSeconds: 5 # Timeout maior para garantir que a aplicação tenha tempo para responder
+            failureThreshold: 3 # Aumenta o número de falhas permitidas antes de reiniciar o contêiner
           readinessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 3
-            periodSeconds: 5
-        - name: nginx-prometheus-exporter
-          image: nginx/nginx-prometheus-exporter:0.10.0
-          args:
-            - "-nginx.scrape-uri=http://localhost:80/nginx_status"
-          ports:
-            - containerPort: 9113
+            initialDelaySeconds: 10 # Dê mais tempo para a aplicação inicializar
+            periodSeconds: 10 # Aumenta a periodicidade
+            timeoutSeconds: 5 # Timeout para a aplicação responder
+            failureThreshold: 3 # Mais tolerância a falhas antes de considerar a aplicação não pronta
+#        - name: nginx-prometheus-exporter
+#          image: nginx/nginx-prometheus-exporter:0.10.0
+#          args:
+#            - "-nginx.scrape-uri=http://localhost:80/nginx_status"
+#          ports:
+#            - containerPort: 9113
+#          volumeMounts:
+#            - name: nginx-config
+#              mountPath: /etc/nginx/nginx.conf
+#              subPath: nginx.conf
+#      volumes:
+#        - name: nginx-config
+#          configMap:
+#            name: nginx-config

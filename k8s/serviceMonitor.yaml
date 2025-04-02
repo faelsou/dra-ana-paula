@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: estetica-app-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus  # Deve corresponder ao nome do Prometheus instalado
+spec:
+  selector:
+    matchLabels:
+      app: estetica-app  # Deve ser igual ao label do Service da aplicação
+#  endpoints:
+#    - port: metrics
+#      path: /metrics
+#      interval: 10s
+  endpoints:
+    - port: http
+      path: /probe
+      params:
+        module: [http_2xx]
+      interval: 10s
+      relabelings:
+        - sourceLabels: [__address__]
+          targetLabel: __param_target
+        - sourceLabels: [__param_target]
+          targetLabel: instance
+        - targetLabel: __address__
+          replacement: estetica-metrics.est-app.svc.cluster.local:9113

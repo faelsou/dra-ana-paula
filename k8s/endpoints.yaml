@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  annotations:
+    endpoints.kubernetes.io/last-change-trigger-time: "2025-04-02T02:17:09Z"
+  creationTimestamp: "2025-04-02T01:28:40Z"
+  labels:
+    app: estetica-app
+  name: estetica-metrics
+  namespace: est-app
+  resourceVersion: "359576"
+  uid: 4102c8ea-6a14-4ab1-b778-8bd999a7effc
+subsets:
+- addresses:
+  - ip: 10.244.0.10
+    nodeName: devops-dev
+    targetRef:
+      kind: Pod
+      name: estetica-app-578889959c-ql9t7
+      namespace: est-app
+      uid: c7191ad9-5c82-4bf8-8cfb-de15487ee167
+  - ip: 10.244.1.17
+    nodeName: devops-dev-m02
+    targetRef:
+      kind: Pod
+      name: estetica-app-578889959c-hpt7g
+      namespace: est-app
+      uid: efddf26a-d586-4a71-ba72-715da7208183
+  - ip: 10.244.2.21
+    nodeName: devops-dev-m03
+    targetRef:
+      kind: Pod
+      name: estetica-app-578889959c-v96z5
+      namespace: est-app
+      uid: 82b43ce3-f5fe-4cc2-870d-3b5e1bdc19cc
+  ports:
+  - name: metrics
+    port: 9113
+    protocol: TCP
