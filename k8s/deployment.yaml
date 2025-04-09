@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: estetica-app
-          image: faelsouz/dra-ana-paula:v1
+          image: faelsouz/dra-ana-paula:v2.0.0
           ports:
             - containerPort: 80
           env:
