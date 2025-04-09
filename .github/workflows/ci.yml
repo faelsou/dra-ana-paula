@@ -17,7 +17,6 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run lint
-      # pula os testes (temporariamente)
       - run: echo "Skip test step for now"
 
   build:
@@ -31,30 +30,19 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run build
-      - name: Create deploy.sh script
-        run: |
-          cat << 'EOF' > deploy.sh
-          #!/bin/bash
-
-          APP_NAME="dra-ana-paula"
-          IMAGE_NAME="faelsouz/${APP_NAME}:v1"
-
-          echo "🚀 Iniciando o deploy local para o Minikube..."
-
-          echo "🔨 Buildando a imagem Docker: ${IMAGE_NAME}"
-          docker build -t ${IMAGE_NAME} .
-
-          echo "📦 Enviando imagem para o Minikube..."
-          minikube image load ${IMAGE_NAME}
-
-          echo "📄 Aplicando manifests Kubernetes..."
-          kubectl apply -f k8s/
-
-          echo "✅ Deploy concluído!"
-          EOF
-          chmod +x deploy.sh
-
+      - run: docker build -t faelsouz/dra-ana-paula:v2.0.0 .
       - uses: actions/upload-artifact@v4
         with:
-          name: deploy-script
-          path: deploy.sh
+          name: docker-image
+          path: .
+  
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Load Docker image into Minikube
+        run: |
+          minikube image load faelsouz/dra-ana-paula:v2.0.0 --profile=devops-dev
+      - name: Apply Kubernetes manifests
+        run: kubectl apply -f k8s/
