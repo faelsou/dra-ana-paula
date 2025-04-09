@@ -19,16 +19,27 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: VITE_SUPABASE_URL
+            - name: REACT_APP_API_URL  # Se for React, use REACT_APP_
+              value: "http://estetica-app-service:3001/api/booking"
+            - name: DATABASE_HOST
+              value: "postgresql"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_USER
               valueFrom:
                 secretKeyRef:
-                  name: supabase-secrets
-                  key: url
-            - name: VITE_SUPABASE_ANON_KEY
+                  name: postgres-secret
+                  key: DATABASE_USER
+            - name: DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: supabase-secrets
-                  key: anon-key
+                  name: postgres-secret
+                  key: DATABASE_PASSWORD
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DATABASE_NAME        
           resources:
             limits:
               cpu: "1"
@@ -40,18 +51,26 @@ spec:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 15 # Aumenta o delay inicial
-            periodSeconds: 20 # Aumenta a periodicidade
-            timeoutSeconds: 5 # Timeout maior para garantir que a aplicação tenha tempo para responder
-            failureThreshold: 3 # Aumenta o número de falhas permitidas antes de reiniciar o contêiner
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /
               port: 80
-            initialDelaySeconds: 10 # Dê mais tempo para a aplicação inicializar
-            periodSeconds: 10 # Aumenta a periodicidade
-            timeoutSeconds: 5 # Timeout para a aplicação responder
-            failureThreshold: 3 # Mais tolerância a falhas antes de considerar a aplicação não pronta
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          volumeMounts:
+            - name: app-storage
+              mountPath: /app/data
+      volumes:
+        - name: app-storage
+          persistentVolumeClaim:
+            claimName: app-pvc  # Nome do PVC a ser usado
+
 #        - name: nginx-prometheus-exporter
 #          image: nginx/nginx-prometheus-exporter:0.10.0
 #          args:

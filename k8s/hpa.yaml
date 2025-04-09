@@ -1,0 +1,26 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  namespace: est-app
+  name: estetica-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: estetica-app
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50  # Ajuste conforme necessário
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60  # Aguarda 1 minuto antes de reduzir os pods
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15  # A cada 15 segundos, pode reduzir os pods rapidamente
