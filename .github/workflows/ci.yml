@@ -48,8 +48,8 @@ jobs:
       - name: Load image into Minikube
         run: minikube image load faelsouz/dra-ana-paula:v2.0.0 --profile=devops-dev
   
-      - name: Apply Kubernetes manifests
-        run: kubectl apply -f k8s/
+#      - name: Apply Kubernetes manifests
+#        run: kubectl apply -f k8s/
   
       - name: Esperar app responder
         run: |
