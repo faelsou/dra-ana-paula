@@ -37,12 +37,32 @@ jobs:
           path: .
   
   deploy:
-    needs: build
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v4
-      - name: Load Docker image into Minikube
-        run: |
-          minikube image load faelsouz/dra-ana-paula:v2.0.0 --profile=devops-dev
-      - name: Apply Kubernetes manifests
-        run: kubectl apply -f k8s/
+  needs: build
+  runs-on: self-hosted
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: docker build -t faelsouz/dra-ana-paula:v1 .
+
+    - name: Load image into Minikube
+      run: minikube image load faelsouz/dra-ana-paula:v1 --profile=devops-dev
+
+    - name: Apply Kubernetes manifests
+      run: kubectl apply -f k8s/
+
+    - name: Esperar app responder
+      run: |
+        APP_URL="http://$(minikube ip):30080"
+        echo "Esperando a aplicação ficar disponível em $APP_URL..."
+        for i in {1..10}; do
+          if curl -s $APP_URL > /dev/null; then
+            echo "Aplicação está online!"
+            exit 0
+          else
+            echo "Tentando novamente..."
+            sleep 5
+          fi
+        done
+        echo "Aplicação não respondeu!"
+        exit 1
