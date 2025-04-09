@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, X, ChevronDown, Phone, Calendar, Star, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Menu} from 'lucide-react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Services from './components/Services';
