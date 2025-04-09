@@ -44,16 +44,13 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Pull image from Docker Hub
-        run: docker pull faelsouz/dra-ana-paula:v2.0.0
-  
-      - name: Load image into Minikube
-        run: minikube image load faelsouz/dra-ana-paula:v2.0.0 --profile=devops-dev
-  
-#      - name: Aplicar manifests
+
+#      - name: Aplicar manifests do Kubernetes
 #        run: kubectl apply -f k8s/
-  
+
+      - name: Ver pods (debug)
+        run: kubectl get pods -A
+
       - name: Port-forward para localhost:8080
         run: |
           kubectl port-forward svc/estetica-app-service 8080:80 -n est-app &
@@ -73,6 +70,5 @@ jobs:
             fi
           done
           echo "Aplicação não respondeu!"
-          exit 1
+          exit 1      
 
-      
