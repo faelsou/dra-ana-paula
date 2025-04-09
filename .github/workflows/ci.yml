@@ -44,16 +44,24 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-
-#      - name: Aplicar manifests do Kubernetes
+      
+      - name: Pull image from Docker Hub
+        run: docker pull faelsouz/dra-ana-paula:v2.0.0
+  
+      - name: Load image into Minikube
+        run: minikube image load faelsouz/dra-ana-paula:v2.0.0 --profile=devops-dev
+  
+#      - name: Aplicar manifests
 #        run: kubectl apply -f k8s/
-
-      - name: Ver pods (debug)
-        run: kubectl get pods -A
-
+  
+      - name: Port-forward para localhost:8080
+        run: |
+          kubectl port-forward svc/estetica-app-service 8080:80 -n est-app &
+          sleep 5
+  
       - name: Esperar app responder
         run: |
-          APP_URL="http://$(minikube ip):30080"
+          APP_URL="http://localhost:8080"
           echo "Esperando a aplicação ficar disponível em $APP_URL..."
           for i in {1..10}; do
             if curl -s $APP_URL > /dev/null; then
@@ -66,4 +74,5 @@ jobs:
           done
           echo "Aplicação não respondeu!"
           exit 1
+
       
