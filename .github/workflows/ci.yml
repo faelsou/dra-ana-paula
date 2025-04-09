@@ -45,8 +45,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Aplicar manifests do Kubernetes
-        run: kubectl apply -f k8s/
+#      - name: Aplicar manifests do Kubernetes
+#        run: kubectl apply -f k8s/
 
       - name: Ver pods (debug)
         run: kubectl get pods -A
