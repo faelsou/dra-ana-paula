@@ -43,10 +43,10 @@ jobs:
       - uses: actions/checkout@v4
   
       - name: Build Docker image
-        run: docker build -t faelsouz/dra-ana-paula:v1 .
+        run: docker build -t faelsouz/dra-ana-paula:v2.0.0 .
   
       - name: Load image into Minikube
-        run: minikube image load faelsouz/dra-ana-paula:v1 --profile=devops-dev
+        run: minikube image load faelsouz/dra-ana-paula:v2.0.0 --profile=devops-dev
   
       - name: Apply Kubernetes manifests
         run: kubectl apply -f k8s/
