@@ -49,7 +49,7 @@ jobs:
 #        run: kubectl apply -f k8s/
 
       - name: Ver pods (debug)
-        run: kubectl get pods -A
+        run: kubectl get pods -n est-app
 
       - name: Port-forward para localhost:8080
         run: |

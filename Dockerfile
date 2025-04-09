@@ -1,11 +1,12 @@
-FROM node:20-alpine AS builder
+# Use versão com suporte LTS
+FROM node:20-alpine3.19 AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:1.25-alpine3.19
 COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
