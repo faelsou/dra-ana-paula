@@ -3,7 +3,7 @@ import { Star } from 'lucide-react';
 
 const testimonials = [
   {
-    name: "Maria Silva",
+    name: "Cicera Maria",
     role: "Cliente",
     content: "Resultados incríveis com o tratamento de harmonização facial. Equipe super profissional e atenciosa!",
     rating: 5
@@ -15,7 +15,7 @@ const testimonials = [
     rating: 5
   },
   {
-    name: "Ana Costa",
+    name: "Paula Souza",
     role: "Cliente",
     content: "Adorei o resultado do meu preenchimento labial. Natural e harmonioso, exatamente como eu queria!",
     rating: 5
