@@ -1,0 +1,12 @@
+image:
+  repository: faelsouz/dra-ana-paula
+  tag: latest
+  pullPolicy: Always
+
+app:
+  name: estetica-app
+  namespace: est-app
+
+service:
+  type: ClusterIP
+  port: 80

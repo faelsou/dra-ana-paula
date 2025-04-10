@@ -1,0 +1,5 @@
+apiVersion: v2
+name: estetica-app
+description: Chart para o app Estética
+version: 0.1.0
+appVersion: "1.0.0"
