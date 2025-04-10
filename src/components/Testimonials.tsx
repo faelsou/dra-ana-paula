@@ -3,19 +3,19 @@ import { Star } from 'lucide-react';
 
 const testimonials = [
   {
-    name: "Cicera Maria",
+    name: "Soraya de Souza",
     role: "Cliente",
     content: "Resultados incríveis com o tratamento de harmonização facial. Equipe super profissional e atenciosa!",
     rating: 5
   },
   {
-    name: "Dr. João Paulo",
+    name: "Dr. Joshua Oliveira Souza",
     role: "Dermatologista Parceiro",
     content: "Estrutura e equipamentos de primeira linha. Ótima parceria para atendimento dos meus pacientes.",
     rating: 5
   },
   {
-    name: "Paula Souza",
+    name: "Helena Zuckenberg",
     role: "Cliente",
     content: "Adorei o resultado do meu preenchimento labial. Natural e harmonioso, exatamente como eu queria!",
     rating: 5
